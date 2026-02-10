@@ -46,18 +46,11 @@ const MainContent: React.FC = () => {
   const [generationStatus, setGenerationStatus] = useState<string>('');
   const [thumbnailCache, setThumbnailCache] = useState<Map<string, { preview: string | null; final: string | null }>>(new Map());
   const [downloaded, setDownloaded] = useState<boolean>(false);
-  const [isFaceMatchEnabled, setIsFaceMatchEnabled] = useState<boolean>(false);
 
   // State for direct thumbnail downloader
   const [downloadLink, setDownloadLink] = useState<string>('');
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
-  
-  useEffect(() => {
-    if (!headshot) {
-        setIsFaceMatchEnabled(false);
-    }
-  }, [headshot]);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -83,9 +76,8 @@ const MainContent: React.FC = () => {
   const getCacheKey = useCallback(() => {
     if (!promptText) return null;
     const headshotKey = headshot ? `-${headshot.base64.substring(0, 100)}` : '';
-    const faceMatchKey = isFaceMatchEnabled && headshot ? '-facelock' : '';
-    return `${promptText}${headshotKey}${faceMatchKey}`;
-  }, [promptText, headshot, isFaceMatchEnabled]);
+    return `${promptText}${headshotKey}`;
+  }, [promptText, headshot]);
 
   const handleGeneratePreview = useCallback(async () => {
     if (!promptText) {
@@ -112,7 +104,7 @@ const MainContent: React.FC = () => {
     setGenerationStatus('Generating fast preview...');
 
     try {
-      const thumbnailBase64 = await generateThumbnail(promptText, headshot?.base64 ?? null, headshot?.mimeType ?? null, 'preview', isFaceMatchEnabled && !!headshot);
+      const thumbnailBase64 = await generateThumbnail(promptText, headshot?.base64 ?? null, headshot?.mimeType ?? null, 'preview');
       if (!thumbnailBase64) throw new Error('AI did not return a preview.');
 
       const imageUrl = `data:image/jpeg;base64,${thumbnailBase64}`;
@@ -127,7 +119,7 @@ const MainContent: React.FC = () => {
       setIsLoading(false);
       setGenerationStatus('');
     }
-  }, [promptText, headshot, thumbnailCache, getCacheKey, isFaceMatchEnabled]);
+  }, [promptText, headshot, thumbnailCache, getCacheKey]);
 
   const handleGenerateFinal = useCallback(async () => {
     if (!promptText) {
@@ -154,7 +146,7 @@ const MainContent: React.FC = () => {
     const maxRetries = 2;
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
-        const thumbnailBase64 = await generateThumbnail(promptText, headshot?.base64 ?? null, headshot?.mimeType ?? null, 'final', isFaceMatchEnabled && !!headshot);
+        const thumbnailBase64 = await generateThumbnail(promptText, headshot?.base64 ?? null, headshot?.mimeType ?? null, 'final');
         if (!thumbnailBase64) throw new Error('AI did not return a final image.');
 
         const imageUrl = `data:image/jpeg;base64,${thumbnailBase64}`;
@@ -180,7 +172,7 @@ const MainContent: React.FC = () => {
     }
     setIsLoading(false);
     setGenerationStatus('');
-  }, [promptText, headshot, thumbnailCache, getCacheKey, isFaceMatchEnabled]);
+  }, [promptText, headshot, thumbnailCache, getCacheKey]);
 
   const handleDownload = useCallback(async () => {
     const sourceImage = finalThumbnail || previewThumbnail;
@@ -332,25 +324,6 @@ const MainContent: React.FC = () => {
               </div>
           </div>
           
-          <div className={`bg-slate-900/50 p-4 rounded-lg transition-opacity ${!headshot ? 'opacity-50' : ''}`}>
-            <label htmlFor="face-match-toggle" className={`flex items-center justify-between ${headshot ? 'cursor-pointer' : 'cursor-not-allowed'}`}>
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-slate-100">Enable Face Match / Face Lock</span>
-                <div className="relative group">
-                  <InfoIcon className="w-5 h-5 text-slate-400" />
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 text-xs text-center text-slate-200 bg-slate-800 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                    Guarantees the AI uses your exact face, only enhancing expression and lighting. For best results, use a clear, frontal headshot.
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                <input type="checkbox" id="face-match-toggle" className="sr-only" checked={isFaceMatchEnabled} onChange={() => headshot && setIsFaceMatchEnabled(!isFaceMatchEnabled)} disabled={!headshot} />
-                <div className={`block w-12 h-6 rounded-full transition-colors ${isFaceMatchEnabled ? 'bg-gradient-to-r from-purple-500 to-cyan-400' : 'bg-slate-600'}`}></div>
-                <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${isFaceMatchEnabled ? 'translate-x-6' : ''}`}></div>
-              </div>
-            </label>
-          </div>
-          
           <button onClick={handleGeneratePreview} disabled={isGenerateButtonDisabled} className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-400 text-white font-bold py-4 px-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-cyan-400/30 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 disabled:hover:shadow-none">
               {isLoading && generationStep === 'idle' ? (<><LoadingSpinnerIcon className="w-6 h-6" /><span>{generationStatus}</span></>) : (<><SparklesIcon className="w-6 h-6" /><span>Generate Preview</span></>)}
           </button>
@@ -414,10 +387,10 @@ const LegalContent: React.FC = () => {
             When you use our service, we may collect the following types of information:
           </p>
           <ul className="list-disc list-inside space-y-2 mb-4 pl-4">
-            <li><strong className="font-semibold text-slate-200">User-Provided Content:</strong> We collect the text prompts and images (e.g., headshots) that you upload for the purpose of generating thumbnails. This data is essential for the core functionality of our service.</li>
+            <li><strong className="font-semibold text-slate-200">User-Provided Content:</strong> We collect the text prompts you enter for the purpose of generating thumbnails. Uploaded images are processed in your browser and are not sent to our servers or any third-party AI service.</li>
             <li><strong className="font-semibold text-slate-200">Technical Data:</strong> We may automatically collect standard technical information, such as your IP address, browser type, and usage patterns. This data is used for analytics and to improve our service.</li>
           </ul>
-          <p className="mb-4 leading-relaxed">We do not store your uploaded images or prompts on our servers after the generation process is complete.</p>
+          <p className="mb-4 leading-relaxed">We do not store your prompts on our servers after the generation process is complete.</p>
 
           <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">2. Cookies Usage</h3>
           <p className="mb-4 leading-relaxed">
@@ -429,7 +402,7 @@ const LegalContent: React.FC = () => {
             Our website relies on third-party services to function:
           </p>
           <ul className="list-disc list-inside space-y-2 mb-4 pl-4">
-            <li><strong className="font-semibold text-slate-200">AI Services (Google Gemini):</strong> Your prompts and uploaded images are securely sent to Google's Gemini API to generate the thumbnails. We do not control how Google processes this data. We recommend you review <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Google's Privacy Policy</a>.</li>
+            <li><strong className="font-semibold text-slate-200">AI Services (OpenRouter):</strong> Your prompts are securely sent to the OpenRouter API to generate thumbnails. We do not control how OpenRouter or the underlying model providers process this data. We recommend you review <a href="https://openrouter.ai/privacy" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">OpenRouter's Privacy Policy</a>.</li>
             <li><strong className="font-semibold text-slate-200">Advertising (Google AdSense):</strong> In the future, we may use Google AdSense to display ads. AdSense uses cookies to serve ads based on a user's prior visits to this and other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Google's Ads Settings</a>.</li>
           </ul>
 
