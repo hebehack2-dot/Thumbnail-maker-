@@ -12,6 +12,28 @@ type ImageData = {
 
 type GenerationStep = 'idle' | 'preview' | 'final';
 
+const AdsenseAd: React.FC = () => {
+  useEffect(() => {
+    try {
+      // @ts-ignore
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("Adsense error:", e);
+    }
+  }, []);
+
+  return (
+    <div className="my-12 rounded-2xl bg-slate-900/20 flex justify-center items-center min-h-[250px]">
+      <ins className="adsbygoogle"
+           style={{ display: 'block', width: '100%' }}
+           data-ad-client="ca-pub-3710786602891626"
+           data-ad-slot="YOUR_AD_SLOT_ID" // IMPORTANT: Replace with your actual Ad Slot ID
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  );
+};
+
 const MainContent: React.FC = () => {
   // State for original thumbnail generator
   const [promptText, setPromptText] = useState<string>('');
@@ -369,7 +391,7 @@ const MainContent: React.FC = () => {
           </div>
         </div>
       </main>
-      <div className="my-12 h-56 rounded-2xl border border-sky-500/30 bg-slate-900/20"></div>
+      <AdsenseAd />
     </>
   );
 };
