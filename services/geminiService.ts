@@ -1,15 +1,11 @@
 
-const OPENROUTER_API_KEY = process.env.API_KEY;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 // Use environment variables for model names with safe fallbacks.
 // OPENROUTER_MODEL is for the main image generation, as requested by the user.
 const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'playgroundai/playground-v2.5';
 // A separate variable is used for the chat model to satisfy the "no hardcoded models" requirement.
 const OPENROUTER_CHAT_MODEL = process.env.OPENROUTER_CHAT_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
-
-if (!OPENROUTER_API_KEY) {
-  throw new Error("API_KEY environment variable is not set. Please ensure your OpenRouter API key is configured in the API_KEY environment variable.");
-}
 
 const generateDetailedPrompt = async (promptText: string): Promise<string> => {
     const llamaSystemPrompt = "You are an expert prompt engineer for AI image generation models. Your task is to take a YouTube video title and transform it into a detailed, descriptive prompt that will generate a high-quality, high-CTR thumbnail. The prompt should be a single paragraph. Do not include any conversational text, headings, or markdown. Only output the final prompt for the image model.";
@@ -56,6 +52,10 @@ export const generateThumbnail = async (
   mimeType: string | null,       // Note: This is not used by the current image generation model.
   quality: 'preview' | 'final'
 ): Promise<string | null> => {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error("Service is unavailable: OPENROUTER_API_KEY is not configured.");
+  }
+
   try {
     // Step 1: Generate a detailed prompt using the user-specified Llama model.
     const detailedPrompt = await generateDetailedPrompt(promptText);

@@ -375,14 +375,14 @@ const LegalContent: React.FC = () => {
       <div className="bg-[#1F2937]/85 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl ring-1 ring-white/10">
         
         {/* Privacy Policy Section */}
-        <h2 className="text-3xl font-bold text-slate-100 mb-6 border-b border-slate-600 pb-4">Privacy Policy</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 mb-6 border-b border-slate-600 pb-4">Privacy Policy</h2>
         <div className="max-w-none text-slate-300 mb-12">
           <p className="mb-4">Last updated: July 26, 2024</p>
           <p className="mb-4 leading-relaxed">
             Welcome to AI Thumbnail Maker. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our website.
           </p>
           
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">1. Information Collection</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">1. Information Collection</h3>
           <p className="mb-4 leading-relaxed">
             When you use our service, we may collect the following types of information:
           </p>
@@ -392,12 +392,12 @@ const LegalContent: React.FC = () => {
           </ul>
           <p className="mb-4 leading-relaxed">We do not store your prompts on our servers after the generation process is complete.</p>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">2. Cookies Usage</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">2. Cookies Usage</h3>
           <p className="mb-4 leading-relaxed">
             We may use cookies and similar tracking technologies to enhance your experience on our site. Cookies are small files placed on your device that help us analyze web traffic and improve our website. Third-party services, like Google AdSense, may also use cookies to serve personalized ads.
           </p>
           
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">3. Third-Party Services</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">3. Third-Party Services</h3>
           <p className="mb-4 leading-relaxed">
             Our website relies on third-party services to function:
           </p>
@@ -406,36 +406,36 @@ const LegalContent: React.FC = () => {
             <li><strong className="font-semibold text-slate-200">Advertising (Google AdSense):</strong> In the future, we may use Google AdSense to display ads. AdSense uses cookies to serve ads based on a user's prior visits to this and other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Google's Ads Settings</a>.</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">4. Data Protection</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">4. Data Protection</h3>
           <p className="mb-4 leading-relaxed">
             We take reasonable measures to protect your information. All data transmitted between your browser and our servers is encrypted via HTTPS. As we do not permanently store your creative assets (prompts and images), the risk of data exposure from our systems is minimized.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">5. User Rights</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">5. User Rights</h3>
           <p className="mb-4 leading-relaxed">
             Your use of the AI Thumbnail Maker is voluntary. By using our service, you consent to the practices described in this policy. If you do not agree with this policy, you have the right to not use our website.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">6. Updates to Policy</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">6. Updates to Policy</h3>
           <p className="mb-4 leading-relaxed">
             We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page. You are advised to review this Privacy Policy periodically for any changes.
           </p>
         </div>
         
         {/* General Policy Section */}
-        <h2 className="text-3xl font-bold text-slate-100 mb-6 border-b border-slate-600 pb-4">General Policy</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 mb-6 border-b border-slate-600 pb-4">General Policy</h2>
         <div className="max-w-none text-slate-300">
           <p className="mb-4">Last updated: July 26, 2024</p>
           <p className="mb-4 leading-relaxed">
             This document outlines the general policies and terms of use for the AI Thumbnail Maker website. By accessing and using our service, you agree to comply with and be bound by the following terms and conditions.
           </p>
           
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">1. Terms of Use</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">1. Terms of Use</h3>
           <p className="mb-4 leading-relaxed">
             This service is provided to you for personal and commercial use, subject to these policies. We reserve the right to modify or terminate the service for any reason, without notice, at any time. You agree not to use the service for any illegal or unauthorized purpose.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">2. Acceptable Use Policy</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">2. Acceptable Use Policy</h3>
           <p className="mb-4 leading-relaxed">
             Users are expected to use the AI Thumbnail Maker responsibly. The following activities are strictly prohibited:
           </p>
@@ -446,17 +446,17 @@ const LegalContent: React.FC = () => {
             <li>Attempting to disrupt or interfere with our servers, networks, or the service itself.</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">3. Responsibility for Generated Content</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">3. Responsibility for Generated Content</h3>
           <p className="mb-4 leading-relaxed">
             You are solely responsible for the thumbnails you create and download using our service. It is your responsibility to ensure that the generated content complies with all applicable laws and the terms of service of third-party platforms, such as YouTube's Community Guidelines. AI-generated images can be unpredictable, and we are not liable for the output.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">4. Disclaimer of Warranties</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">4. Disclaimer of Warranties</h3>
           <p className="mb-4 leading-relaxed">
             The service is provided on an "as is" and "as available" basis. We make no warranty that the service will meet your requirements, be uninterrupted, timely, secure, or error-free. Any content downloaded or otherwise obtained through the use of the service is done at your own discretion and risk.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-200 mt-8 mb-4">5. Limitation of Liability</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-slate-200 mt-8 mb-4">5. Limitation of Liability</h3>
           <p className="mb-4 leading-relaxed">
             In no event shall AI Thumbnail Maker, its owners, or affiliates be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or the inability to use the service or for the cost of procurement of substitute services.
           </p>
