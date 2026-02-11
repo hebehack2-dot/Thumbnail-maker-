@@ -114,12 +114,7 @@ const MainContent: React.FC = () => {
         setThumbnailCache(prev => new Map(prev).set(cacheKey, { ...(prev.get(cacheKey) || { preview: null, final: null }), preview: imageUrl }));
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to generate preview.';
-      if (errorMessage.includes('OPENROUTER_API_KEY')) {
-          setError('Service is not configured. Please contact the administrator.');
-      } else {
-          setError(errorMessage);
-      }
+      setError(err instanceof Error ? err.message : 'Failed to generate preview.');
     } finally {
       setIsLoading(false);
       setGenerationStatus('');
@@ -162,18 +157,15 @@ const MainContent: React.FC = () => {
         break;
       } catch (err) {
         console.error(`Attempt ${attempt + 1} failed:`, err);
-        if (err instanceof Error) {
-            if (err.message.includes('OPENROUTER_API_KEY')) {
-                setError('Service is not configured. Please contact the administrator.');
-                break; 
-            }
-            if (err.message.includes('Face Match Failed')) {
-                setError(err.message);
-                break;
-            }
+        const errorMessage = err instanceof Error ? err.message : "An unknown error occurred.";
+
+        if (errorMessage.includes('Face Match Failed')) {
+            setError(errorMessage);
+            break;
         }
+
         if (attempt === maxRetries) {
-          setError("Generation is temporarily unavailable. Please try again later.");
+          setError(errorMessage || "Generation is temporarily unavailable. Please try again later.");
           break;
         }
         setGenerationStatus("Server is busy. Retrying automatically...");
