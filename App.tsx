@@ -114,7 +114,12 @@ const MainContent: React.FC = () => {
         setThumbnailCache(prev => new Map(prev).set(cacheKey, { ...(prev.get(cacheKey) || { preview: null, final: null }), preview: imageUrl }));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate preview.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to generate preview.';
+      if (errorMessage.includes('OPENROUTER_API_KEY')) {
+          setError('Service is not configured. Please contact the administrator.');
+      } else {
+          setError(errorMessage);
+      }
     } finally {
       setIsLoading(false);
       setGenerationStatus('');
@@ -157,9 +162,15 @@ const MainContent: React.FC = () => {
         break;
       } catch (err) {
         console.error(`Attempt ${attempt + 1} failed:`, err);
-        if (err instanceof Error && err.message.includes('Face Match Failed')) {
-            setError(err.message);
-            break;
+        if (err instanceof Error) {
+            if (err.message.includes('OPENROUTER_API_KEY')) {
+                setError('Service is not configured. Please contact the administrator.');
+                break; 
+            }
+            if (err.message.includes('Face Match Failed')) {
+                setError(err.message);
+                break;
+            }
         }
         if (attempt === maxRetries) {
           setError("Generation is temporarily unavailable. Please try again later.");
@@ -285,7 +296,7 @@ const MainContent: React.FC = () => {
     <>
       <main className="space-y-8">
         <div className="bg-[#1F2937]/85 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl ring-1 ring-white/10">
-              <h2 className="text-2xl font-bold text-slate-100 mb-1">Download Thumbnail from Link</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-1">Download Thumbnail from Link</h2>
               <p className="text-slate-300 mb-6">Instantly download the highest quality thumbnail from a video link.</p>
               <div className="flex flex-col sm:flex-row items-center gap-4">
                   <input type="text" value={downloadLink} onChange={(e) => { setDownloadLink(e.target.value); setDownloadError(null); }} placeholder="Enter YouTube / Video link" className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-300" />
@@ -299,12 +310,12 @@ const MainContent: React.FC = () => {
           
         <div className="bg-[#1F2937]/85 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl ring-1 ring-white/10 flex flex-col gap-8">
           <div>
-              <label htmlFor="prompt-text" className="block text-lg font-semibold text-slate-200 mb-2 tracking-wide">1. Enter Prompt</label>
+              <label htmlFor="prompt-text" className="block text-base sm:text-lg font-semibold text-slate-200 mb-2 tracking-wide">1. Enter Prompt</label>
               <input type="text" id="prompt-text" value={promptText} onChange={(e) => setPromptText(e.target.value)} placeholder="Enter prompt for thumbnail generation" className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all duration-300" />
           </div>
 
           <div>
-              <label className="block text-lg font-semibold text-slate-200 mb-2 tracking-wide">2. Upload Headshot (Optional)</label>
+              <label className="block text-base sm:text-lg font-semibold text-slate-200 mb-2 tracking-wide">2. Upload Headshot (Optional)</label>
               <div className="mt-1 flex justify-center p-6 border-2 border-slate-600 border-dashed rounded-xl bg-black/20">
                   <div className="space-y-2 text-center">
                       {headshot ? (
@@ -330,7 +341,7 @@ const MainContent: React.FC = () => {
         </div>
 
         <div className="bg-[#1F2937]/85 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl ring-1 ring-white/10 flex flex-col justify-center items-center">
-          <h2 className="text-2xl font-bold mb-4 text-slate-100 tracking-wide self-start">Generated Thumbnail</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 text-slate-100 tracking-wide self-start">Generated Thumbnail</h2>
           <div className="aspect-[16/9] w-full bg-slate-900/50 rounded-lg flex items-center justify-center ring-2 ring-white/10 shadow-inner p-1">
               <div className="w-full h-full bg-slate-900 rounded-md flex items-center justify-center p-2 ring-1 ring-slate-700">
                   {isLoading && (<div className="flex flex-col items-center text-slate-300 gap-2 text-center"><LoadingSpinnerIcon className="w-10 h-10 text-cyan-400" /><p className="font-medium tracking-wide">{generationStatus}</p></div>)}
